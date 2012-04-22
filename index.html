@@ -1,139 +1,225 @@
+
+<!DOCTYPE html>
+<!--
+Copyright 2011 Seth Ladd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
 <html>
-<script src="box2d.js"></script>
-<!-- <script src="prototype-1.6.0.2.js"></script>
-<script src='box2d/common/b2Settings.js'></script>
-<script src='box2d/common/math/b2Vec2.js'></script>
-<script src='box2d/common/math/b2Mat22.js'></script>
-<script src='box2d/common/math/b2Math.js'></script>
-<script src='box2d/collision/b2AABB.js'></script>
-<script src='box2d/collision/b2Bound.js'></script>
-<script src='box2d/collision/b2BoundValues.js'></script>
-<script src='box2d/collision/b2Pair.js'></script>
-<script src='box2d/collision/b2PairCallback.js'></script>
-<script src='box2d/collision/b2BufferedPair.js'></script>
-<script src='box2d/collision/b2PairManager.js'></script>
-<script src='box2d/collision/b2BroadPhase.js'></script>
-<script src='box2d/collision/b2Collision.js'></script>
-<script src='box2d/collision/Features.js'></script>
-<script src='box2d/collision/b2ContactID.js'></script>
-<script src='box2d/collision/b2ContactPoint.js'></script>
-<script src='box2d/collision/b2Distance.js'></script>
-<script src='box2d/collision/b2Manifold.js'></script>
-<script src='box2d/collision/b2OBB.js'></script>
-<script src='box2d/collision/b2Proxy.js'></script>
-<script src='box2d/collision/ClipVertex.js'></script>
-<script src='box2d/collision/shapes/b2Shape.js'></script>
-<script src='box2d/collision/shapes/b2ShapeDef.js'></script>
-<script src='box2d/collision/shapes/b2BoxDef.js'></script>
-<script src='box2d/collision/shapes/b2CircleDef.js'></script>
-<script src='box2d/collision/shapes/b2CircleShape.js'></script>
-<script src='box2d/collision/shapes/b2MassData.js'></script>
-<script src='box2d/collision/shapes/b2PolyDef.js'></script>
-<script src='box2d/collision/shapes/b2PolyShape.js'></script>
-<script src='box2d/dynamics/b2Body.js'></script>
-<script src='box2d/dynamics/b2BodyDef.js'></script>
-<script src='box2d/dynamics/b2CollisionFilter.js'></script>
-<script src='box2d/dynamics/b2Island.js'></script>
-<script src='box2d/dynamics/b2TimeStep.js'></script>
-<script src='box2d/dynamics/contacts/b2ContactNode.js'></script>
-<script src='box2d/dynamics/contacts/b2Contact.js'></script>
-<script src='box2d/dynamics/contacts/b2ContactConstraint.js'></script>
-<script src='box2d/dynamics/contacts/b2ContactConstraintPoint.js'></script>
-<script src='box2d/dynamics/contacts/b2ContactRegister.js'></script>
-<script src='box2d/dynamics/contacts/b2ContactSolver.js'></script>
-<script src='box2d/dynamics/contacts/b2CircleContact.js'></script>
-<script src='box2d/dynamics/contacts/b2Conservative.js'></script>
-<script src='box2d/dynamics/contacts/b2NullContact.js'></script>
-<script src='box2d/dynamics/contacts/b2PolyAndCircleContact.js'></script>
-<script src='box2d/dynamics/contacts/b2PolyContact.js'></script>
-<script src='box2d/dynamics/b2ContactManager.js'></script>
-<script src='box2d/dynamics/b2World.js'></script>
-<script src='box2d/dynamics/b2WorldListener.js'></script>
-<script src='box2d/dynamics/joints/b2JointNode.js'></script>
-<script src='box2d/dynamics/joints/b2Joint.js'></script>
-<script src='box2d/dynamics/joints/b2JointDef.js'></script>
-<script src='box2d/dynamics/joints/b2DistanceJoint.js'></script>
-<script src='box2d/dynamics/joints/b2DistanceJointDef.js'></script>
-<script src='box2d/dynamics/joints/b2Jacobian.js'></script>
-<script src='box2d/dynamics/joints/b2GearJoint.js'></script>
-<script src='box2d/dynamics/joints/b2GearJointDef.js'></script>
-<script src='box2d/dynamics/joints/b2MouseJoint.js'></script>
-<script src='box2d/dynamics/joints/b2MouseJointDef.js'></script>
-<script src='box2d/dynamics/joints/b2PrismaticJoint.js'></script>
-<script src='box2d/dynamics/joints/b2PrismaticJointDef.js'></script>
-<script src='box2d/dynamics/joints/b2PulleyJoint.js'></script>
-<script src='box2d/dynamics/joints/b2PulleyJointDef.js'></script>
-<script src='box2d/dynamics/joints/b2RevoluteJoint.js'></script>
-<script src='box2d/dynamics/joints/b2RevoluteJointDef.js'></script> -->
-<script src="/socket.io/socket.io.js"></script>
-<canvas id="surface" width="600" height="400" style="background-color:#333333;" ></canvas> 
-<script>
-  var socket = io.connect('http://169.254.177.66:8080');
-
-
-  var line = {
-    x: 300,
-    y: 200,
-    length: 100,
-    angle: 0
-  };
-
-  var ball = {
-    x: 0,
-    y: 0,
-    vx: 2,
-    vy: 3,
-    r: 10
-  }
-
-  var canvas = document.getElementById("surface");
-  var ctx = canvas.getContext('2d');
-
-  setInterval(function() {
-
-    // Clear display
-    ctx.save();
-      ctx.fillStyle = "rgba(0, 0, 0, .2)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.restore();
-
-    // Update ball
-    ball.x += ball.vx;
-    ball.y += ball.vy;
-    if (ball.x > canvas.width - ball.r) {
-      ball.x = canvas.width - ball.r;
-      ball.vx = -Math.abs(ball.vx);
+  <head>
+    <meta charset="utf-8">
+    <title>Box2D Javascript Fun : 11 : Box2D with Impulse and HTML5 Canvas</title>
+    <link rel="author" href="http://profiles.google.com/sethladd">
+    <script src="../Box2D.js"></script>
+    <script src="bTest.js"></script>
+    <style>
+    body {
+      -webkit-transform: translateZ(0);
     }
-    else if (ball.x < ball.r) {
-      ball.x = ball.r;
-      ball.vx = Math.abs(ball.vx);
-    }
-    if (ball.y > canvas.height - ball.r) {
-      ball.y = canvas.height - ball.r;
-      ball.vy = -Math.abs(ball.vy);
-    }
-    else if (ball.y < ball.r) {
-      ball.y = ball.r;
-      ball.vy = Math.abs(ball.vy);
-    }
+    </style>
+  </head>
+  <body>
+    <canvas id="c0" width="640" height="480" style="border: 1px solid black"></canvas>
+    
+    <script>
+    // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+    window.requestAnimFrame = (function(){
+          return  window.requestAnimationFrame       || 
+                  window.webkitRequestAnimationFrame || 
+                  window.mozRequestAnimationFrame    || 
+                  window.oRequestAnimationFrame      || 
+                  window.msRequestAnimationFrame     || 
+                  function(/* function */ callback, /* DOMElement */ element){
+                    window.setTimeout(callback, 1000 / 60);
+                  };
+    })();
+    </script>
+      
+    <script>
 
-    // Update angle - with geometry! =)
-    var triangle_x = ball.x - line.x;
-    var triangle_y = ball.y - line.y;
-    line.angle = Math.atan2(triangle_y, triangle_x);
-
-    var x = line.x + line.length * Math.cos(line.angle);
-    var y = line.y + line.length * Math.sin(line.angle);
-
-    // Draw ball
-    ctx.save();
-      ctx.translate(ball.x, ball.y);
-      ctx.fillStyle = "#fff";
+    var powerElem = document.getElementById('power');
+    var angleElem = document.getElementById('angle');
+    var bulletElem = document.getElementById('bullet');
+    
+    var SCALE = 30;
+    var NULL_CENTER = {x:null, y:null};
+    
+    function Entity(id, x, y, angle, center, color) {
+      this.id = id;
+      this.x = x;
+      this.y = y;
+      this.angle = angle || 0;
+      this.center = center;
+      this.color = color || "red";
+    }
+    
+    Entity.prototype.update = function(state) {
+      this.x = state.x;
+      this.y = state.y;
+      this.center = state.c;
+      this.angle = state.a;
+    }
+    
+    Entity.prototype.draw = function(ctx) {
+      ctx.fillStyle = 'black';
       ctx.beginPath();
-      ctx.arc(0, 0, ball.r, 0, Math.PI * 2, true);
+      ctx.arc(this.x * SCALE, this.y * SCALE, 4, 0, Math.PI * 2, true);
       ctx.closePath();
       ctx.fill();
-    ctx.restore();
-  }, 1000 / 77);
-</script> 
+      
+      ctx.fillStyle = 'yellow';
+      ctx.beginPath();
+      ctx.arc(this.center.x * SCALE, this.center.y * SCALE, 2, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+    }
+    
+    Entity.build = function(def) {
+      if (def.radius) {
+        return new CircleEntity(def.id, def.x, def.y, def.angle, NULL_CENTER, def.color, def.radius);
+      } else {
+        return new RectangleEntity(def.id, def.x, def.y, def.angle, NULL_CENTER, def.color, def.halfWidth, def.halfHeight);
+      }
+    }
+    
+    function CircleEntity(id, x, y, angle, center, color, radius) {
+      color = color || 'aqua';
+      Entity.call(this, id, x, y, angle, center, color);
+      this.radius = radius;
+    }
+    CircleEntity.prototype = new Entity();
+    CircleEntity.prototype.constructor = CircleEntity;
+    
+    CircleEntity.prototype.draw = function(ctx) {
+      ctx.save();
+      ctx.translate(this.x * SCALE, this.y * SCALE);
+      ctx.rotate(this.angle);
+      ctx.translate(-(this.x) * SCALE, -(this.y) * SCALE);
+      
+      ctx.fillStyle = this.color;
+      ctx.strokeStyle = 'black';
+      ctx.beginPath();
+      ctx.arc(this.x * SCALE, this.y * SCALE, this.radius * SCALE, 0, Math.PI * 2, true);
+      ctx.moveTo(this.x * SCALE, this.y * SCALE);
+      ctx.lineTo((this.x) * SCALE, (this.y + this.radius) * SCALE);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      
+      ctx.restore();
+      
+      Entity.prototype.draw.call(this, ctx);
+    }
+    
+    function RectangleEntity(id, x, y, angle, center, color, halfWidth, halfHeight) {
+      Entity.call(this, id, x, y, angle, center, color);
+      this.halfWidth = halfWidth;
+      this.halfHeight = halfHeight;
+    }
+    RectangleEntity.prototype = new Entity();
+    RectangleEntity.prototype.constructor = RectangleEntity;
+    
+    RectangleEntity.prototype.draw = function(ctx) {
+      ctx.save();
+      ctx.translate(this.x * SCALE, this.y * SCALE);
+      ctx.rotate(this.angle);
+      ctx.translate(-(this.x) * SCALE, -(this.y) * SCALE);
+      ctx.fillStyle = this.color;
+      ctx.fillRect((this.x-this.halfWidth) * SCALE,
+                   (this.y-this.halfHeight) * SCALE,
+                   (this.halfWidth*2) * SCALE,
+                   (this.halfHeight*2) * SCALE);
+      ctx.restore();
+      
+      Entity.prototype.draw.call(this, ctx);
+    }
+    
+    
+    var world = {};
+    var bodiesState = null;
+    var box = null;
+    
+    function update(animStart) {
+      box.update();
+      bodiesState = box.getState();
+      
+      for (var id in bodiesState) {
+        var entity = world[id];
+        if (entity) entity.update(bodiesState[id]);
+      }
+    }
+    
+    var ctx = document.getElementById("c0").getContext("2d");
+    var canvasWidth = ctx.canvas.width;
+    var canvasHeight = ctx.canvas.height;
+    
+    function draw() {
+      
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      for (var id in world) {
+        var entity = world[id];
+        entity.draw(ctx);
+      }
+    }
+    
+    var initialState = [
+      {id: "ground", x: ctx.canvas.width / 2 / SCALE, y: ctx.canvas.height / SCALE, halfHeight: 0.5, halfWidth: ctx.canvas.width / SCALE, color: 'yellow'},
+      {id: "ball", x: 2, y: ctx.canvas.height / SCALE, radius: 0.5},
+    ];
+    
+    var running = true;
+    var impulseTimeout = null;
+    var initTimeout = null;
+    
+    function init() {
+      for (var i = 0; i < initialState.length; i++) {
+        world[initialState[i].id] = Entity.build(initialState[i]);
+      }
+      
+      box = new bTest(60, false, canvasWidth, canvasHeight, SCALE);
+      box.setBodies(world, false);
+      
+      impulseTimeout = setTimeout(function() {
+        box.applyImpulse("ball", 30, 600);
+      }, 1000);
+      
+      impulseTimeout = setTimeout(function() {
+        box.applyImpulse("ball", 180, 650);
+      }, 1500);
+      
+      impulseTimeout = setTimeout(function() {
+        init();
+      }, 2000);
+    }
+    
+    var restart = false;
+    
+    document.addEventListener("DOMContentLoaded", function() {
+      init();
+      
+      (function loop(animStart) {
+        if (restart) {
+          clearTimeout(impulseTimeout);
+          clearTimeout(initTimeout);
+          init();
+          restart = false;
+        }
+        update(animStart);
+        draw();
+        requestAnimFrame(loop);
+      })();
+    }, false);
+    
+    </script>
+  </body>
 </html>
