@@ -255,10 +255,10 @@ limitations under the License.
       var value = Math.sqrt(mid)
       if(data.player == "stageright"){
         lastPlayer = "stageright"
-        box.applyImpulse("ball", 0 - force, 0 - value);
+        box.applyImpulse("ball", 0 - force, 0 - (100 + value));
       } else {
         lastPlayer = "stageleft"
-        box.applyImpulse("ball", force, value);  
+        box.applyImpulse("ball", force, (100 + value));  
       }
     })
     
