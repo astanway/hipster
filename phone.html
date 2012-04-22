@@ -9,10 +9,10 @@
   var lastHit = new Date().getTime()
   window.addEventListener('devicemotion', function(event) {
     y = event.acceleration.y
-    z = event.acceleration.x
-    if(Math.sqrt(Math.pow(y * 15, 2) + Math.pow(z * 15, 2)) > 300){
+    z = event.acceleration.z
+    if(Math.sqrt(Math.pow(y * 15, 2) + Math.pow(z * 15, 2)) > 100){
       var next = new Date().getTime()
-      if(next - lastHit > 1000){
+      if(next - lastHit > 300){
         lastHit = next;
         socket.emit('hit', position)
       } 

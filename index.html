@@ -102,6 +102,13 @@ limitations under the License.
     CircleEntity.prototype = new Entity();
     CircleEntity.prototype.constructor = CircleEntity;
     
+    var img = new Image();
+    var loaded = false;
+    img.src = 'trollface.jpg';
+    img.onload = function(){
+      loaded = true;
+    }
+    
     CircleEntity.prototype.draw = function(ctx) {
       ctx.save();
       ctx.translate(this.x * SCALE, this.y * SCALE);
@@ -117,6 +124,8 @@ limitations under the License.
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
+      
+      ctx.drawImage(img, this.x*SCALE-10, this.y*SCALE-10);
       
       ctx.restore();
       
@@ -176,10 +185,10 @@ limitations under the License.
     
     var initialState = [
       {id: "ground", x: ctx.canvas.width / 2 / SCALE, y: ctx.canvas.height / SCALE, halfHeight: 0.5, halfWidth: ctx.canvas.width / SCALE, color: 'yellow'},
-      {id: "ball", x: 30, y: ctx.canvas.height / SCALE, radius: 0.5},
-      {id: "ceiling", x: ctx.canvas.width / 2 / SCALE, y: ctx.canvas.height / SCALE, halfHeight: 0.5, halfWidth: ctx.canvas.width / SCALE, color: 'yellow'},
-      {id: "left", x: ctx.canvas.width / 2 / SCALE, y: ctx.canvas.height / SCALE, halfHeight: 0.5, halfWidth: ctx.canvas.width / SCALE, color: 'yellow'},
-      {id: "right", x: ctx.canvas.width / 2 / SCALE, y: ctx.canvas.height / SCALE, halfHeight: 0.5, halfWidth: ctx.canvas.width / SCALE, color: 'yellow'},
+      {id: "ball", x: 23, y: ctx.canvas.height / 2 / SCALE, radius: 0.5},
+      {id: "ceiling", x: ctx.canvas.width / 2 / SCALE, y: 0, halfHeight: 0.5, halfWidth: ctx.canvas.width / SCALE, color: 'yellow'},
+      {id: "left", x: 0, y: 10, halfHeight: ctx.canvas.height / SCALE, halfWidth: .5, color: 'yellow'},
+      {id: "right", x: ctx.canvas.width / SCALE, y: 10, halfHeight: ctx.canvas.height / SCALE, halfWidth: .5, color: 'yellow'},
     ];
     
     var running = true;
@@ -197,38 +206,37 @@ limitations under the License.
       
       box = new bTest(60, false, canvasWidth, canvasHeight, SCALE);
       box.setBodies(world, false);
-    }    
-    
-    setInterval(function(){
-      if(world.ball.x < 6 && !isOnStageRight){
-        isOnStageRight = true;
-        isOnStageLeft = false;
-        socket.emit('wantVelocity', 1)
-      } else if (world.ball.x > 40 && !isOnStageLeft){
-        isOnStageLeft = true;
-        isOnStageRight = false;
-        socket.emit('wantVelocity', 2)
-      }
-    }, 50)
+    }
     
     socket.on('fuckingVelocity', function(data){
       var force = (630 - data.angle) % 360
-      var mid = Math.pow(data.y * 15, 2) + Math.pow(data.z * 15, 2);
+      var mid = Math.pow(data.y * 21, 2) + Math.pow(data.z * 21, 2);
       var value = Math.sqrt(mid)
       if(data.player == "stageright"){
-        box.applyImpulse("ball", 0 - force, 0 - (600 + value));
+        box.applyImpulse("ball", 0 - force, 0 - value);
       } else {
-        box.applyImpulse("ball", force, 600 + value);  
+        box.applyImpulse("ball", force, value);  
       }
     })
     
     socket.on('browserHit', function(data){
-      if(world.ball.x < 20 && data === 'stageright'){
+      if(world.ball.x < 25 && data === 'stageright'){
         socket.emit('wantVelocity', 1)
-      } else if (world.ball.x <= 40 && data === 'stageleft'){
+        //lasthit by ---
+      } else if (world.ball.x >= 25 && data === 'stageleft'){
         socket.emit('wantVelocity', 2)
+        //lasthit by ---
       }
     })
+    
+    setInterval(check where ball position is)
+      if its where teh image is, give points to the player
+      and spawn a new image randomly
+    
+    
+    setTimeout(function(){
+      box.applyImpulse("ball", 360 * Math.random(), 600);  
+    }, 5)
     
     var restart = false;
     

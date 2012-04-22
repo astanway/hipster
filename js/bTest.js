@@ -21,14 +21,14 @@ function bTest(intervalRate, adaptive, width, height, scale) {
   this.bodiesMap = {};
 
   this.world = new b2World(
-        new b2Vec2(0, 50)    //gravity
+        new b2Vec2(0, 60)    //gravity
      ,  true                 //allow sleep
   );
 
   this.fixDef = new b2FixtureDef;
-  this.fixDef.density = 20.0;
-  this.fixDef.friction = 0.4;
-  this.fixDef.restitution = .5;
+  this.fixDef.density = 14.0;
+  this.fixDef.friction = 0.1;
+  this.fixDef.restitution = .62;
 }
 
 // bTest.prototype.buildGround = function() {
@@ -81,7 +81,7 @@ bTest.prototype.setBodies = function(bodyEntities, enableBullet) {
     for(var id in bodyEntities) {
         var entity = bodyEntities[id];
         
-        if (entity.id == 'ground') {
+        if (entity.id == 'ground' || entity.id == 'ceiling' || entity.id == 'right' || entity.id == 'left') {
             bodyDef.type = b2Body.b2_staticBody;
         } else {
             bodyDef.type = b2Body.b2_dynamicBody;
