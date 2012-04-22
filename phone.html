@@ -1,7 +1,7 @@
 <html>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  var socket = io.connect('http://169.254.90.125:8080');
+  var socket = io.connect('http://169.254.156.162:8080');
   var y = 0;
   var z = 0;
 
@@ -21,7 +21,7 @@
 
   socket.on('get' + position + 'Velocity', function(){
     data = {'y' : y, 'z': z, 'b': b, 'g': g, 'player' : position}
-    socket.emit('velocity', data);
+    socket.emit('clientVelocity', data);
   })
   
 </script>

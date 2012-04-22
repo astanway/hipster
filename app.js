@@ -23,31 +23,34 @@ app.get('/browser', function (req, res) {
 });
 
 io.sockets.on('connection', function (socket) {
-  socket.on('velocity', function(data){
+  socket.on('clientVelocity', function(data){
     if(data.b > 0 && Math.abs(data.g) < 70){
       angle = data.b
+      data['angle'] = angle
       console.log("upward strike " + angle)
-      console.log(data.player);
+      socket.broadcast.emit('fuckingVelocity', data)
     }
     
     if(data.b > 0 && Math.abs(data.g) >= 70){
       angle = 180 - data.b
+      data['angle'] = angle
       console.log("downward strike " + angle)
-      console.log(data.player);
+      socket.broadcast.emit('fuckingVelocity', data)
     }
     
     if(data.b < 0){
-      angle = 180 - data.b
-      console.log("underhand strike " + angle);
-      console.log(data.player);
+      angle = Math.abs(data.b)
+      data['angle'] = angle
+      socket.broadcast.emit('fuckingVelocity', data)
     }
   })
 
   socket.on('wantVelocity', function(data){
+    console.log("want");
     if(data == 1){
-      socket.broadcast.emit('getstageleftVelocity')
+      socket.broadcast.emit('getstagerightVelocity')
     } else {
-      socket.broadcast.emit('getstagerightVelocity') 
+      socket.broadcast.emit('getstageleftVelocity') 
     }
   })
 });

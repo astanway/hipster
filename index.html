@@ -47,8 +47,8 @@ limitations under the License.
     </script>
       
     <script>
-    var socket = io.connect('http://169.254.90.125:8080');
-
+    var socket = io.connect('http://169.254.156.162:8080');
+    var box;
     var powerElem = document.getElementById('power');
     var angleElem = document.getElementById('angle');
     var bulletElem = document.getElementById('bullet');
@@ -183,6 +183,9 @@ limitations under the License.
     var impulseTimeout = null;
     var initTimeout = null;
     
+    var isOnStageLeft = false,
+        isOnStageRight = false;
+      
     function init() {
       for (var i = 0; i < initialState.length; i++) {
         world[initialState[i].id] = Entity.build(initialState[i]);
@@ -192,27 +195,38 @@ limitations under the License.
       box.setBodies(world, false);
       
       impulseTimeout = setTimeout(function() {
-        box.applyImpulse("ball", 30, 600);
+        box.applyImpulse("ball", 60, 500);
       }, 1000);
       
+      
       // impulseTimeout = setTimeout(function() {
-      //   box.applyImpulse("ball", 180, 650);
+      //   box.applyImpulse("ball", (630 - 45) % 360, 600);
       // }, 1500);
       
       impulseTimeout = setTimeout(function() {
         init();
-      }, 2000);      
+      }, 3000); 
     }
     
+    
     setInterval(function(){
-      console.log(world.ball.x);
-      if(world.ball.x < 10){
+      if(world.ball.x < 3 && !isOnStageRight){
+        isOnStageRight = true;
+        isOnStageLeft = false;
         socket.emit('wantVelocity', 1)
-      } else if (world.ball.x > 10){
+      } else if (world.ball.x > 16 && !isOnStageLeft){
+        isOnStageLeft = true;
+        isOnStageRight = false;
         socket.emit('wantVelocity', 2)
       }
     }, 50)
     
+    socket.on('fuckingVelocity', function(data){
+      console.log(data.angle);
+      force = (630 - data.angle) % 360
+      console.log(force)
+      box.applyImpulse("ball", force, 700);
+    })
     
     var restart = false;
     
