@@ -1,0 +1,26 @@
+<html>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://169.254.177.66:8080');
+  var y = 0;
+  var z = 0;
+
+  window.addEventListener('devicemotion', function(event) {
+    y = event.acceleration.y
+    z = event.acceleration.z
+  })
+
+  var b = 0;
+  var g = 0;
+  window.addEventListener('deviceorientation', function(event){
+    b = event.beta;
+    g = event.gamma;
+  }, true)  
+  
+  socket.on('getVelocity', function(){
+    data = {'y' : y, 'z': z, 'b': b, 'g': g}
+    socket.emit('velocity', data);
+  })
+  
+</script>
+</html>
