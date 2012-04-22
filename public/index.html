@@ -39,6 +39,14 @@ limitations under the License.
       right: 0px;
       top: 5px;
     }
+    #text{
+      font: Helvetica;
+      font-weight: bold;
+      font-size: 100px;
+      position: absolute;
+      right: 200px;
+      top: 500px;
+    }
     </style>
   </head>
   <body>
@@ -48,6 +56,7 @@ limitations under the License.
       </div>
       
       <div id="winner"></div>
+      <div id="text">GET MAD HIPSTER POINTS YO</div>
     <canvas id="c0" width="1400" height="650" style="border: 1px solid black"></canvas>
     
     <script>
@@ -65,7 +74,7 @@ limitations under the License.
     </script>
       
     <script>
-    var socket = io.connect('http://169.254.156.162:8080');
+    var socket = io.connect('http://169.254.230.44:8080');
     var box;
     var powerElem = document.getElementById('power');
     var angleElem = document.getElementById('angle');
@@ -238,12 +247,16 @@ limitations under the License.
     
     var box;
     function init() {
+      document.getElementById('text').innerHTML = ""
       for (var i = 0; i < initialState.length; i++) {
         world[initialState[i].id] = Entity.build(initialState[i]);
       }
       
       box = new bTest(60, false, canvasWidth, canvasHeight, SCALE);
       box.setBodies(world, false);
+      setTimeout(function(){
+        box.applyImpulse("ball", 360 * Math.random(), 600);  
+      }, 5)
     }
     
     var lastPlayer = 0 ;
@@ -273,14 +286,10 @@ limitations under the License.
       }
     })
     
-    
-    setTimeout(function(){
-      box.applyImpulse("ball", 360 * Math.random(), 600);  
-    }, 5)
-    
     var restart = false;
     
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("keydown", function(e) {
+      console.log(e);
       init();
       
       (function loop(animStart) {
@@ -326,7 +335,7 @@ limitations under the License.
              }
              if(etsys.length === 0){
                clearInterval(interval);
-               stageRightScore > stageLeftScore ? winner = "Hipter 1" : winner = "Hipster 2"
+               stageRightScore > stageLeftScore ? winner = "Hipster 1" : winner = "Hipster 2"
                document.getElementById("winner").innerHTML = winner + " has the most hipster points, yo.";
                currentEtsy = null;
               

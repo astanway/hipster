@@ -2,6 +2,7 @@ var express = require('express')
 var app = express.createServer()
 var static = require('node-static');
 var jquery = require('jquery');
+var mongoose = require('mongoose');
 var io = require('socket.io').listen(app);
 
 app.listen(8080);
