@@ -27,14 +27,12 @@ io.sockets.on('connection', function (socket) {
     if(data.b > 0 && Math.abs(data.g) < 70){
       angle = data.b
       data['angle'] = angle
-      console.log("upward strike " + angle)
       socket.broadcast.emit('fuckingVelocity', data)
     }
     
     if(data.b > 0 && Math.abs(data.g) >= 70){
       angle = 180 - data.b
       data['angle'] = angle
-      console.log("downward strike " + angle)
       socket.broadcast.emit('fuckingVelocity', data)
     }
     
@@ -46,11 +44,14 @@ io.sockets.on('connection', function (socket) {
   })
 
   socket.on('wantVelocity', function(data){
-    console.log("want");
     if(data == 1){
       socket.broadcast.emit('getstagerightVelocity')
     } else {
       socket.broadcast.emit('getstageleftVelocity') 
     }
+  })
+  
+  socket.on('hit', function(data){
+    socket.broadcast.emit('browserHit', data)
   })
 });
