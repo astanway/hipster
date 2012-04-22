@@ -35,10 +35,8 @@ io.sockets.on('connection', function (socket) {
       console.log("underhand strike " + angle);
     }
   })
-  
-  
-  
-  setInterval(function(){
+
+  socket.on('wantVelocity', function(data){
     socket.emit('getVelocity')
-  }, 2000)
+  })
 });

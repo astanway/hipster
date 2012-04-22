@@ -28,7 +28,7 @@ function bTest(intervalRate, adaptive, width, height, scale) {
   this.fixDef = new b2FixtureDef;
   this.fixDef.density = 20.0;
   this.fixDef.friction = 0.9;
-  this.fixDef.restitution = .8;
+  this.fixDef.restitution = .9;
 }
 
 // bTest.prototype.buildGround = function() {

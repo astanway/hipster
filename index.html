@@ -199,8 +199,13 @@ limitations under the License.
       
       impulseTimeout = setTimeout(function() {
         init();
-      }, 2000);
+      }, 2000);      
     }
+    
+    setInterval(function(){
+      console.log(world.ball.x);
+    }, 50)
+    
     
     var restart = false;
     
