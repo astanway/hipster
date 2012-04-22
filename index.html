@@ -1,34 +1,26 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<html>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://169.254.146.48:8080');
+  var y = 0;
+  var z = 0;
 
-<style>
-#paddle{
-  height: 20px;
-  width: 100px;
-  background-color: black;
-}
-</style>
-<script type="text/javascript">
-  var last = 0;
-  var last_time = (new Date).getTime()
-  var velocity = function(event){
-    ev = event || window.event;
+  window.addEventListener('devicemotion', function(event) {
+    y = event.acceleration.y
+    z = event.acceleration.z
+  })
 
-    current = ev.pageX
-    distance = current - last
-
-    current_time = (new Date).getTime()
-    time = current_time - last_time
-
-    speed = distance / time
-    document.getElementById("velocity").innerHTML = speed ;
-    
-    last_time = current_time
-    last = current
-  }
-  window.onload = function(){
-    document.onmousemove = velocity;
-  }
-
-  </script>
-<div id="velocity">
-  </div>
+  var b = 0;
+  var g = 0;
+  window.addEventListener('deviceorientation', function(event){
+    b = event.beta;
+    g = event.gamma;
+  }, true)  
+  
+  socket.on('getVelocity', function(){
+    data = {'y' : y, 'z': z, 'b': b, 'g': g}
+    socket.emit('velocity', data);
+  })
+  
+</script>
+</html>
