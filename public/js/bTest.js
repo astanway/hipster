@@ -26,7 +26,7 @@ function bTest(intervalRate, adaptive, width, height, scale) {
   );
 
   this.fixDef = new b2FixtureDef;
-  this.fixDef.density = 14.0;
+  this.fixDef.density = 12.0;
   this.fixDef.friction = 0.1;
   this.fixDef.restitution = .62;
 }

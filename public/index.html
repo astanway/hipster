@@ -26,10 +26,28 @@ limitations under the License.
     <style>
     body {
       -webkit-transform: translateZ(0);
+      font: Helvetica;
+      font-weight: bold;
+      font-size: 35px;
+    }
+    
+    #winner{
+      font: Helvetica;
+      font-weight: bold;
+      font-size: 50px;
+      position: absolute;
+      right: 0px;
+      top: 5px;
     }
     </style>
   </head>
   <body>
+    <div id="players">
+      Hipster 1 score: <span id="hipster1">0</span><br>
+      Hipster 2 score: <span id="hipster2">0</span>
+      </div>
+      
+      <div id="winner"></div>
     <canvas id="c0" width="1400" height="650" style="border: 1px solid black"></canvas>
     
     <script>
@@ -87,7 +105,7 @@ limitations under the License.
       ctx.closePath();
       ctx.fill();
       
-      ctx.fillStyle = 'yellow';
+      ctx.fillStyle = 'brown';
       ctx.beginPath();
       ctx.arc(this.center.x * SCALE, this.center.y * SCALE, 2, 0, Math.PI * 2, true);
       ctx.closePath();
@@ -121,7 +139,13 @@ limitations under the License.
     //}
     
     
-    
+    var trollface = false;
+    var trollface2 = false;
+    var trollimg = new Image();
+    trollimg.src = 'js/trollface.jpg';
+    trollimg.onload = function(){
+      trollface2 = true;
+    }
     CircleEntity.prototype.draw = function(ctx) {
       ctx.save();
       ctx.translate(this.x * SCALE, this.y * SCALE);
@@ -138,8 +162,9 @@ limitations under the License.
       ctx.fill();
       ctx.stroke();
       
-      //ctx.drawImage(img, this.x*SCALE-10, this.y*SCALE-10);
-      
+      if(trollface && trollface2){
+        ctx.drawImage(trollimg, this.x, this.y);
+      }
       ctx.restore();
       
       Entity.prototype.draw.call(this, ctx);
@@ -197,11 +222,11 @@ limitations under the License.
     }
     
     var initialState = [
-      {id: "ground", x: ctx.canvas.width / 2 / SCALE, y: ctx.canvas.height / SCALE, halfHeight: 0.5, halfWidth: ctx.canvas.width / SCALE, color: 'yellow'},
+      {id: "ground", x: ctx.canvas.width / 2 / SCALE, y: ctx.canvas.height / SCALE, halfHeight: 0.5, halfWidth: ctx.canvas.width / SCALE, color: 'brown'},
       {id: "ball", x: 23, y: ctx.canvas.height / 2 / SCALE, radius: 0.5},
-      {id: "ceiling", x: ctx.canvas.width / 2 / SCALE, y: 0, halfHeight: 0.5, halfWidth: ctx.canvas.width / SCALE, color: 'yellow'},
-      {id: "left", x: 0, y: 10, halfHeight: ctx.canvas.height / SCALE, halfWidth: .5, color: 'yellow'},
-      {id: "right", x: ctx.canvas.width / SCALE, y: 10, halfHeight: ctx.canvas.height / SCALE, halfWidth: .5, color: 'yellow'},
+      {id: "ceiling", x: ctx.canvas.width / 2 / SCALE, y: 0, halfHeight: 0.5, halfWidth: ctx.canvas.width / SCALE, color: 'brown'},
+      {id: "left", x: 0, y: 10, halfHeight: ctx.canvas.height / SCALE, halfWidth: .5, color: 'brown'},
+      {id: "right", x: ctx.canvas.width / SCALE, y: 10, halfHeight: ctx.canvas.height / SCALE, halfWidth: .5, color: 'brown'},
     ];
     
     var running = true;
@@ -221,13 +246,18 @@ limitations under the License.
       box.setBodies(world, false);
     }
     
+    var lastPlayer = 0 ;
+    var stageRightScore = 0;
+    var stageLeftScore = 0;
     socket.on('fuckingVelocity', function(data){
       var force = (630 - data.angle) % 360
       var mid = Math.pow(data.y * 21, 2) + Math.pow(data.z * 21, 2);
       var value = Math.sqrt(mid)
       if(data.player == "stageright"){
+        lastPlayer = "stageright"
         box.applyImpulse("ball", 0 - force, 0 - value);
       } else {
+        lastPlayer = "stageleft"
         box.applyImpulse("ball", force, value);  
       }
     })
@@ -286,10 +316,24 @@ limitations under the License.
       var interval = setInterval(function(){
          if(world.ball.x > currentEtsy.x/SCALE && world.ball.x < (currentEtsy.x + 170)/SCALE){
            if(world.ball.y > currentEtsy.y/SCALE && world.ball.y < (currentEtsy.y + 135)/SCALE){
-             console.log(currentEtsy.price);
              ctx.clearRect(currentEtsy.x, currentEtsy.y, 170, 135);
+             if(lastPlayer == "stageright"){
+               stageRightScore += currentEtsy.price;
+               document.getElementById("hipster1").innerHTML = stageRightScore;
+             } else {
+               stageLeftScore += currentEtsy.price;
+              document.getElementById("hipster2").innerHTML = stageLeftScore;
+             }
              if(etsys.length === 0){
                clearInterval(interval);
+               stageRightScore > stageLeftScore ? winner = "Hipter 1" : winner = "Hipster 2"
+               document.getElementById("winner").innerHTML = winner + " has the most hipster points, yo.";
+               currentEtsy = null;
+              
+               trollface = true;
+               
+               
+               
              } else{
                currentEtsy = etsys.pop();
                currentEtsy.x = 10+Math.random()*(ctx.canvas.width-170-20);
@@ -305,16 +349,11 @@ limitations under the License.
       etsys[i].img.src = etsys[i].img_src;
       etsys[i].img.onload = function(){
         count++;
-        if(count == etsys.length){
+        if(count === etsys.length){
           startEtsyGame();
         }
       }
-    }
-  
-  
-  
-  
-  
+    } 
     </script>
   </body>
 </html>
