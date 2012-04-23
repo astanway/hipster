@@ -1,1 +1,5 @@
-To play: Use your phones like Wii-motes. Get mad hipster points.
+To play: Create a local network on your Mac. Run `ifconfig` and get the value of the en0 address. Run `node app.js`. In your browser, go to the address you just found on port 8080 with the path /browser. 
+
+On your phone, connect to the local network and go to /stageleft. Get a buddy to do the same and have him/her/it go to /stageleft. Stand on the appropriate sides of the computer.
+
+Press any key to start the game. You can now start hitting the ball with your phones.
