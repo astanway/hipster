@@ -74,7 +74,7 @@ limitations under the License.
     </script>
       
     <script>
-    var socket = io.connect('http://169.254.230.44:8080');
+    var socket = io.connect(window.location.origin);
     var box;
     var powerElem = document.getElementById('power');
     var angleElem = document.getElementById('angle');
