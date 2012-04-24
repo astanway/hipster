@@ -1,0 +1,11 @@
+{
+	"name": "twilio_twss",
+	"version": "0.0.1",
+	"dependencies": {
+		"express": "2.5.9",
+		"node-static": "0.5.9",
+		"socket.io": "0.9.6",
+		"mongoose": "2.6.0",
+		"jquery": "1.6.3"
+	}
+}
