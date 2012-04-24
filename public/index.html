@@ -78,7 +78,7 @@ limitations under the License.
 	<script>
 		jQuery('#hipster1_qrcode').qrcode({width:96, height:96, text:window.location.origin+'/stageleft'});
 		jQuery('#hipster2_qrcode').qrcode({width:96, height:96, text:window.location.origin+'/stageright'});
-    var socket = io.connect(window.location.origin);
+   var socket = io.connect(window.location.origin);
     var box;
     var powerElem = document.getElementById('power');
     var angleElem = document.getElementById('angle');
