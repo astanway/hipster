@@ -22,7 +22,9 @@ limitations under the License.
     <link rel="author" href="http://profiles.google.com/sethladd">
     <script src="../js/Box2D.js"></script>
     <script src="/js/bTest.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="./jquery.js"></script>
+	<script src='./js/jquery.qrcode.min.js'></script>
     <style>
     body {
       -webkit-transform: translateZ(0);
@@ -51,9 +53,9 @@ limitations under the License.
   </head>
   <body>
     <div id="players">
-      Hipster 1 score: <span id="hipster1">0</span><br>
-      Hipster 2 score: <span id="hipster2">0</span>
-      </div>
+	  <span id="hipster1_qrcode"></span>Hipster 1 score: <span id="hipster1">0</span>
+	  <span id="hipster2_qrcode"></span>Hipster 2 score: <span id="hipster2">0</span>
+    </div>
       
       <div id="winner"></div>
       <div id="text">GET MAD HIPSTER POINTS YO</div>
@@ -73,7 +75,9 @@ limitations under the License.
     })();
     </script>
       
-    <script>
+	<script>
+		jQuery('#hipster1_qrcode').qrcode({width:64, height:64, text:window.location.origin+'/stageleft'});
+		jQuery('#hipster2_qrcode').qrcode({width:64, height:64, text:window.location.origin+'/stageright'});
     var socket = io.connect(window.location.origin);
     var box;
     var powerElem = document.getElementById('power');
