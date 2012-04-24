@@ -2,14 +2,15 @@ var express = require('express')
 var app = express.createServer()
 var static = require('node-static');
 var jquery = require('jquery');
-var mongoose = require('mongoose');
 var io = require('socket.io').listen(app);
-var Schema = mongoose.Schema;
 
-var db = mongoose.connect("mogodb://localhost/hipster");
-var Winners = mongoose.model('Winners', new Schema({"i" : String}));
-var win = new Winners({"i" : "win"});
-win.save();
+//this was only here so we could say that we were webscale
+//var mongoose = require('mongoose');
+//var Schema = mongoose.Schema;
+//var db = mongoose.connect("mogodb://localhost/hipster");
+//var Winners = mongoose.model('Winners', new Schema({"i" : String}));
+//var win = new Winners({"i" : "win"});
+//win.save();
 
 app.listen(8080);
 
